@@ -1,0 +1,16 @@
+{
+  "identifiers": {
+    "Instrument-ID": {
+      "type": "from-list",
+      "list": ["sev", "spec", "uv-vis", "osc"]
+    },
+    "Sample-ID": {
+      "type": "from-catalogue",
+      "path": "sample_catalogue"
+    },
+    "Description": {
+      "type": "regex",
+      "r-string": "[_b\\w]{3}[g\\d]{2}s([0-9]{3})"
+    }
+  }
+}
