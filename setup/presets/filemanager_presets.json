@@ -6,11 +6,34 @@
     },
     "Sample-ID": {
       "type": "from-catalogue",
-      "path": "sample_catalogue"
+      "path": "C:/Users/baier/OneDrive/Programmierprojekte/data_fiasco/sample_catalogue.json"
     },
     "Description": {
       "type": "regex",
-      "r-string": "[_b\\w]{3}[g\\d]{2}s([0-9]{3})"
+      "r-string": "b[\\w]{1}[g\\d]{2}s([0-9]{3})"
+    }
+  },
+  "filename criteria": {
+    "forbidden endings": [".bin", "notes.txt", ".json"],
+    "osc": {
+      "contains": [
+        "wave"
+      ],
+      "ending": ".txt"
+    },
+    "sev": {
+      "contains": [
+        "hist"
+      ],
+      "ending": ".txt"
+    },
+    "spec": {
+      "contains": [],
+      "ending": ".csv"
+    },
+    "uv-vis": {
+      "contains": [],
+      "ending": ".csv"
     }
   }
 }
