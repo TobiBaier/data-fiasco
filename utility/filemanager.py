@@ -264,10 +264,41 @@ class FileManager:
             else:
                 raise FileExistsError(f"A file already exists at this location: {path} !")
 
+    def resort_data(self, order=None, relpath=""):
+        if order is None:
+            order = []
+
+        for file in os.listdir(self.data_path + "/" + relpath):
+            filepath = os.path.join(self.data_path + "/" + relpath, file)
+            if os.path.isdir(filepath):
+                self.resort_data(order=order, relpath="/" + relpath + "/" + file)
+            if os.path.isfile(filepath):
+                if self.check_identifiers(file, sort_only=True):
+
+                    origin_path = self.get_data_path(file, check_rest=False, check_identifier=False)
+
+                    new_relpath = ""
+                    for i in order:
+                        new_relpath = new_relpath + file.split("_")[i] + "/"
+
+                    new_path = self.condata_path + "/" + new_relpath
+
+                    if not os.path.isdir(new_path):
+                        os.makedirs(new_path)
+
+                    new_path = new_path + "/" + file
+
+                    print(f"{origin_path} ----> {new_path}")
+                    shutil.copyfile(origin_path, new_path)
+
+
+
+
+
 
 a = FileManager("C:/Users/baier/OneDrive/Programmierprojekte/data_fiasco/")
 # print(a.get_identifiers("sev_bis105_bcg2s060_na22_hist_good.txt"))
-print(a.sort_to_dirs())
+print(a.resort_data([1, 0]))
 
 # print(a.check_identifiers())
 
