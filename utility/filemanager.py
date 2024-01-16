@@ -2,6 +2,11 @@ import os, re, json, shutil
 from pprint import pprint
 # import numpy as np
 
+"""
+some notes:
+- the identifier order in the json determines the order in the filename
+"""
+
 
 def test_identifier(text, identifier):
     # test for catalogue type
@@ -46,6 +51,7 @@ class FileManager:
 
         # load presets, save identifiers extra
         self.identifiers = {}
+        self.sort_by_identifiers = []
         self.presets = None
         self.load_setup()
 
@@ -60,6 +66,8 @@ class FileManager:
             self.presets = json.load(of)
 
         # extract given identifiers, if type is list or catalogue
+        self.sort_by_identifiers = [False] * len(self.presets["identifiers"])
+
         for i, identifier in enumerate(self.presets["identifiers"]):
             # construct basis dict, saving ident position, type and content
             self.identifiers[identifier] = {
@@ -68,6 +76,9 @@ class FileManager:
                 "content": None,
                 "sort-by": self.presets["identifiers"][identifier]["sort-by"],
             }
+
+            # additionally save if file is to be sorted by identifier
+            self.sort_by_identifiers[i] = self.identifiers[identifier]["sort-by"]
 
             # list is provided
             if self.identifiers[identifier]["type"] == "from-list":
@@ -81,6 +92,8 @@ class FileManager:
             # regex string is saved
             elif self.identifiers[identifier]["type"] == "regex":
                 self.identifiers[identifier]["content"] = self.presets["identifiers"][identifier]["r-string"]
+
+
 
     def check_filename_format(self, filename, check_identifier=True, check_rest=True):
         name_elements = filename.split("_")
@@ -214,8 +227,48 @@ class FileManager:
         except AttributeError:
             return 
 
+    def sort_to_dirs(self):
+        files = []
+
+        # go through all files (!) in the sort directory and save only their name to a list
+        for filepath in os.listdir(self.sort_path):
+            if os.path.isfile(os.path.join(self.sort_path, filepath)):
+                files.append(filepath)
+
+        # iterate over the files
+        for file in files:
+            # create clean variable that will contain the new filepath later
+            path = ""
+
+            # check if all identifiers to sort by are given
+            if self.check_identifiers(file, sort_only=True):
+                # add the identifiers to path, if the file shall be sorted by them
+                for use, element in zip(self.sort_by_identifiers, self.get_identifiers(file)):
+                    if use:
+                        path = path + "/" + element
+
+            # convert to an absolute path to the new directory
+            path = self.data_path + "/" + path
+
+            # create directory if necessary
+            if not os.path.isdir(path):
+                os.makedirs(path)
+
+            # create filepath
+            path = path + "/" + file
+
+            # check if there is no file at the desired location with the same name
+            if not os.path.isfile(path):
+                os.rename(self.sort_path + "/" + file, path)
+                print(f"Moved a file from {self.sort_path + '/' + file} to {path}!")
+            else:
+                raise FileExistsError(f"A file already exists at this location: {path} !")
 
 
 a = FileManager("C:/Users/baier/OneDrive/Programmierprojekte/data_fiasco/")
 # print(a.get_identifiers("sev_bis105_bcg2s060_na22_hist_good.txt"))
-print(a.get_save_path("ahh.test"))
+print(a.sort_to_dirs())
+
+# print(a.check_identifiers())
+
+
