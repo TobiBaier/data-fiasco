@@ -2,15 +2,20 @@
   "identifiers": {
     "Instrument-ID": {
       "type": "from-list",
-      "list": ["sev", "spec", "uv-vis", "osc"]
+      "list": ["sev", "spec", "uv-vis", "osc"],
+      "sort-by": true
     },
     "Sample-ID": {
       "type": "from-catalogue",
-      "path": "C:/Users/baier/OneDrive/Programmierprojekte/data_fiasco/sample_catalogue.json"
+      "path": "C:/Users/baier/OneDrive/Programmierprojekte/data_fiasco/sample_catalogue.json",
+      "sort-by": true
+
     },
     "Description": {
       "type": "regex",
-      "r-string": "b[\\w]{1}[g\\d]{2}s([0-9]{3})"
+      "r-string": "b[\\w]{1}[g\\d]{2}s([0-9]{3})",
+      "sort-by": false
+
     }
   },
   "filename criteria": {

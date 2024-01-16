@@ -66,6 +66,7 @@ class FileManager:
                 "type": self.presets["identifiers"][identifier]["type"],
                 "position": i,
                 "content": None,
+                "sort-by": self.presets["identifiers"][identifier]["sort-by"],
             }
 
             # list is provided
@@ -116,11 +117,15 @@ class FileManager:
 
         return filename
 
-    def check_identifiers(self, filename):
+    def check_identifiers(self, filename, sort_only=False):
         name_elements = filename.split("_")
 
         # this does a positional check as well (in comparison to test_identifier)
         for name, identifier in self.identifiers.items():
+
+            if identifier["sort-by"] is False and sort_only is True:
+                continue
+
             if identifier["type"] == "from-catalogue":
                 if name_elements[identifier["position"]] not in identifier["content"].keys():
                     print(f"Name does not contain '{name}' identifier of type from-catalogue!")
@@ -136,12 +141,14 @@ class FileManager:
                     print(f"Name does not contain '{name}' identifier of type regex!")
                     return False
 
+        return True
+
     def get_identifiers(self, filename):
         check_ret = self.check_identifiers(filename)
         name_elements = filename.split("_")
 
         # if not all identifier are given, cycle through the name and check if any are in there
-        if False in check_ret:
+        if not check_ret:
             print("WARNING: Filename does not contain all defined identifiers!")
             for i, element in enumerate(name_elements.copy()):
                 for identifier in self.identifiers.values():
@@ -157,13 +164,58 @@ class FileManager:
         else:
             return name_elements[0:len(self.identifiers)]
 
-    def get_data_path(self, filename):
-        pass
+    def get_data_path(self, filename, check_identifier=True, check_rest=True):
+        """
+
+        :param check_identifier:
+        :param check_rest:
+        :param filename:
+        :return:
+        """
+
+        path = self.data_path
+
+        # retrieve a list of identifiers in name -> construct a filename from that
+        ids = self.get_identifiers(filename)
+        for i, identifier in enumerate(self.identifiers.values()):
+
+            # only use ids, by which database is sorted
+            if identifier["sort-by"] and ids != []:
+
+                # if id is not included, skip iteration -> errors are handled later
+                if ids[i] is None:
+                    continue
+
+                # add id to the path
+                path = path + "/" + ids[i]
+
+        # check, if file validates given constraints on filename format
+        temp = self.check_filename_format(filename, check_identifier=check_identifier, check_rest=check_rest)
+
+        # path may not link to a file if wrong ids were give -> do a full search for it
+        if temp and os.path.isfile(path + "/" + temp):
+            return path + "/" + temp
+        else:
+            return self.search_data_path(filename)
+
+    def search_data_path(self, filename):
+        for root, direc, files in os.walk(self.data_path):
+            if filename in files:
+                return os.path.join(root, filename)
+
+        print("Tried to find any file with given name but failed. Check if ending is included.")
+
+        return False
 
     def get_save_path(self, filename):
-        pass
+
+        try:
+            return self.get_data_path(filename).replace(self.data_path, self.prodata_path)
+        except AttributeError:
+            return 
 
 
 
 a = FileManager("C:/Users/baier/OneDrive/Programmierprojekte/data_fiasco/")
-print(a.get_identifiers("sev_bis105_bcg2s060_na22_hist_good.txt"))
+# print(a.get_identifiers("sev_bis105_bcg2s060_na22_hist_good.txt"))
+print(a.get_save_path("ahh.test"))
