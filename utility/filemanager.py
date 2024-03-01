@@ -58,8 +58,12 @@ class FileManager:
     def load_setup(self):
 
         # load presets
-        with open("../setup/presets/filemanager_presets.json", "r") as of:
-            self.presets = json.load(of)
+        try:
+            with open("../setup/presets/filemanager_presets.json", "r") as of:
+                self.presets = json.load(of)
+        except FileNotFoundError:
+            raise FileNotFoundError("Could not load Filemanager-presets at "
+                                    "'../setup/presets/filemanager_presets.json'!")
 
         # extract given identifiers, if type is list or catalogue
         self.sort_by_identifiers = [False] * len(self.presets["identifiers"])

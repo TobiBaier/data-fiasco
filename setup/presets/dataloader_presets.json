@@ -1,0 +1,36 @@
+{
+  "Instrument-ID": {
+    "osc": {
+        "data_type": "txt",
+        "sep": ";",
+        "skiprows": 5,
+        "usecols": [
+            0,
+            1
+        ]
+    },
+    "sev": {
+        "data_type": "txt",
+        "skiprows": 5,
+        "usecols": [
+            0,
+            1
+        ],
+        "bin_ret": true
+    },
+    "spec": {
+        "data_type": "csv",
+        "skiprows": 0
+    },
+    "uv-vis": {
+        "data_type": "csv",
+        "sep": ",",
+        "skipfooter": 2,
+        "skiprows": 2,
+        "usecols": [
+            0,
+            1
+        ]
+    }
+  }
+}
