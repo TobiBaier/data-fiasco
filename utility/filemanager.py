@@ -57,10 +57,6 @@ class FileManager:
 
     def load_setup(self):
 
-        # load sample catalogue
-        # with open(self.path + self.cat_name, "r") as of:
-        #     self.samples = json.load(of)
-
         # load presets
         with open("../setup/presets/filemanager_presets.json", "r") as of:
             self.presets = json.load(of)
@@ -92,8 +88,6 @@ class FileManager:
             # regex string is saved
             elif self.identifiers[identifier]["type"] == "regex":
                 self.identifiers[identifier]["content"] = self.presets["identifiers"][identifier]["r-string"]
-
-
 
     def check_filename_format(self, filename, check_identifier=True, check_rest=True):
         name_elements = filename.split("_")
@@ -300,6 +294,5 @@ a = FileManager("C:/Users/baier/OneDrive/Programmierprojekte/data_fiasco/")
 # print(a.get_identifiers("sev_bis105_bcg2s060_na22_hist_good.txt"))
 print(a.resort_data([1, 0]))
 
-# print(a.check_identifiers())
 
 
