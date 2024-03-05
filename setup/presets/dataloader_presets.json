@@ -1,29 +1,44 @@
 {
   "Instrument-ID": {
     "osc": {
-        "data_type": "txt",
+      "data-format": {
         "sep": ";",
+        "skiprows": 5,
+        "usecols": [
+          0,
+          1
+        ]
+      },
+      "settings": {
+        "data_type": "txt"
+      }
+    },
+
+    "sev": {
+      "data-format": {
         "skiprows": 5,
         "usecols": [
             0,
             1
         ]
-    },
-    "sev": {
+      },
+      "settings": {
         "data_type": "txt",
-        "skiprows": 5,
-        "usecols": [
-            0,
-            1
-        ],
         "bin_ret": true
+      }
     },
+
     "spec": {
-        "data_type": "csv",
+      "data-format": {
         "skiprows": 0
+      },
+      "settings": {
+        "data_type": "csv"
+      }
     },
+
     "uv-vis": {
-        "data_type": "csv",
+      "data-format": {
         "sep": ",",
         "skipfooter": 2,
         "skiprows": 2,
@@ -31,6 +46,10 @@
             0,
             1
         ]
+      },
+      "settings": {
+        "data_type": "csv"
+      }
     }
   }
 }

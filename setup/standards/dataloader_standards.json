@@ -1,20 +1,29 @@
 {
   "csv": {
-    "encoding": "iso-8859-1",
-    "header": null,
-    "sep": ";",
-    "skipfooter": 0,
-    "skiprows": 0,
-    "swap_axes": true,
-    "usecols": null,
+    "data-format": {
+      "encoding": "iso-8859-1",
+      "header": null,
+      "sep": ";",
+      "skipfooter": 0,
+      "skiprows": 0
+    },
+    "settings": {
+      "swap_axes": true,
+      "usecols": null
+    }
+
   },
   "txt": {
-    "encoding": "iso-8859-1",
-    "header": null,
-    "sep": ";",
-    "skipfooter": 0,
-    "skiprows": 0,
-    "swap_axes": true,
-    "usecols": null
+    "data-format": {
+      "encoding": "iso-8859-1",
+      "header": null,
+      "sep": ";",
+      "skipfooter": 0,
+      "skiprows": 0
+    },
+    "settings": {
+      "swap_axes": true,
+      "usecols": null
+    }
   }
 }

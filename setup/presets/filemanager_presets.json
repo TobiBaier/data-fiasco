@@ -7,7 +7,7 @@
     },
     "Sample-ID": {
       "type": "from-catalogue",
-      "path": "C:/Users/baier/OneDrive/Programmierprojekte/data_fiasco/sample_catalogue.json",
+      "path": "/sample_catalogue.json",
       "sort-by": true
 
     },
