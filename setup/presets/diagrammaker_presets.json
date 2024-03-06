@@ -1,0 +1,80 @@
+{
+    "osc": {
+        "ax": {
+            "set_xlabel": "time",
+            "set_ybound": [
+                null,
+                null
+            ],
+            "set_ylabel": "pulse height"
+        },
+        "plot_kwargs": {
+            "color": "black",
+            "label": null,
+            "linewidth": 0.5,
+            "ls": "-",
+            "marker": null
+        },
+        "plot_type": "plot"
+
+    },
+    "sev": {
+        "plot_type": "hist",
+        "ax": {
+            "set_xbound": [
+                0,
+                null
+            ],
+            "set_xlabel": "Pulsintegral/Kanal",
+            "set_ybound": [
+                0,
+                null
+            ],
+            "set_ylabel": "gezählte Ereignisse"
+        },
+        "plot_kwargs": {
+            "color": "black",
+            "label": null,
+            "linewidth": 1,
+            "ls": "-"
+        }
+
+    },
+    "spec": {
+        "ax": {
+            "set_xlabel": "Wellenlänge / nm",
+            "set_ybound": [
+                0,
+                null
+            ],
+            "set_ylabel": "gezählte Ereignisse in 30s"
+        },
+        "plot_kwargs": {
+            "color": "black",
+            "label": null,
+            "ls": "-",
+            "lw": 1,
+            "marker": null
+        },
+        "plot_type": "plot"
+    },
+    "uv-vis": {
+        "plot_type": "plot",
+        "ax": {
+            "set_xlabel": "Wellenlänge / nm",
+            "set_ybound": [
+                0,
+                null
+            ],
+            "set_ylabel": "Transmission / %"
+        },
+        "plot_kwargs": {
+            "color": "black",
+            "label": null,
+            "ls": "-",
+            "lw": 1,
+            "marker": null
+        }
+
+    }
+}

@@ -1,0 +1,90 @@
+{
+  "plot": {
+    "general": {
+      "ax": null,
+      "dpi": 400,
+      "draw": false,
+      "save": true,
+      "path": null,
+      "label": null
+    },
+    "ax": {
+      "suptitle": null,
+      "title": null,
+      "set_xbound": null,
+      "set_xlabel": "x",
+      "set_xscale": "linear",
+      "set_ybound": null,
+      "set_ylabel": "y",
+      "set_yscale": "linear",
+      "grid": {
+        "visible": true,
+        "color": "#87878790",
+        "zorder": -1000,
+        "lw": 1
+      },
+      "tick_params": {
+        "direction": "in",
+        "top": true,
+        "right": true,
+        "which": "both"
+      },
+      "ticklabel_format": {
+        "style": "sci",
+        "useMathText": true,
+        "useLocale": true
+      }
+    },
+    "plot_kwargs": {
+      "color": "black",
+      "ls": "-",
+      "lw": 1,
+      "zorder": 100,
+      "label": null
+    }
+  },
+  "hist": {
+    "general": {
+      "ax": null,
+      "dpi": 400,
+      "draw": false,
+      "save": true,
+      "path": null,
+      "label": null
+
+    },
+    "ax": {
+      "suptitle": null,
+      "title": null,
+      "set_xbound": null,
+      "set_xlabel": "x",
+      "set_xscale": "linear",
+      "set_ybound": null,
+      "set_ylabel": "y",
+      "set_yscale": "linear",
+      "grid": {
+        "visible": true,
+        "color": "#87878790",
+        "zorder": -1000,
+        "lw": 1
+      },
+      "tick_params": {
+        "direction": "in",
+        "top": true,
+        "right": true,
+        "which": "both"
+      },
+      "ticklabel_format": {
+        "style": "sci",
+        "useMathText": true,
+        "useLocale": true
+      }
+    },
+    "plot_kwargs": {
+      "color": "black",
+      "lw": 1,
+      "zorder": 100,
+      "label": null
+    }
+  }
+}
