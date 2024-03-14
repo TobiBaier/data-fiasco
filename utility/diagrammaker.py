@@ -7,6 +7,26 @@ from pprint import pprint
 locale.setlocale(locale.LC_ALL, "")
 
 
+def merge(a: dict, b: dict, path=None):
+    if path is None:
+        path = []
+
+    for key in b:
+        if key in a:
+            if isinstance(a[key], dict) and isinstance(b[key], dict):
+                merge(a[key], b[key], path + [str(key)])
+            elif isinstance(a[key], list) or isinstance(b[key], list):
+                if a[key] is None:
+                    a[key] = b[key]
+                elif b[key] is None:
+                    a[key] = a[key]
+            elif a[key] != b[key]:
+                pass  # raise Exception('Conflict at ' + '.'.join(path + [str(key)]))
+        else:
+            a[key] = b[key]
+    return a
+
+
 class DiagramMaker:
 
     def __init__(self):
@@ -56,41 +76,7 @@ class DiagramMaker:
 
 
 
-def merge(a: dict, b: dict, path=[]):
-    for key in b:
-        if key in a:
-            if isinstance(a[key], dict) and isinstance(b[key], dict):
-                merge(a[key], b[key], path + [str(key)])
-            elif isinstance(a[key], list) or isinstance(b[key], list):
-                if a[key] == None:
-                    a[key] = b[key]
-                elif b[key] == None:
-                    a[key] = a[key]
-            elif a[key] != b[key]:
-                pass # raise Exception('Conflict at ' + '.'.join(path + [str(key)]))
-        else:
-            a[key] = b[key]
-    return a
-
-
 
 # print([92, 32] + [None])
 
-
-a = DiagramMaker()
-
-b = merge(dict(a.presets["sev"]), a.standards["hist"])
-
-c = {
-    "ax":{
-        "set_xlabel": "test"
-    }
-}
-
-pprint(merge(c, b))
-
-
-
-
 # eval(---) throws a NameError
-
