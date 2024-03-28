@@ -5,12 +5,13 @@
       "dpi": 400,
       "draw": false,
       "save": true,
-      "path": null,
-      "label": null
+      "path": null
+    },
+    "plt": {
+      "title": null,
+      "suptitle": null
     },
     "ax": {
-      "suptitle": null,
-      "title": null,
       "set_xbound": null,
       "set_xlabel": "x",
       "set_xscale": "linear",
@@ -51,11 +52,12 @@
       "save": true,
       "path": null,
       "label": null
-
+    },
+    "plt": {
+      "title": null,
+      "suptitle": null
     },
     "ax": {
-      "suptitle": null,
-      "title": null,
       "set_xbound": null,
       "set_xlabel": "x",
       "set_xscale": "linear",

@@ -36,14 +36,14 @@ class DiagramMaker:
 
     def load_setup(self):
         try:
-            with open("../setup/presets/diagrammaker_presets.json", "r") as of:
+            with open("../setup/presets/diagrammaker_presets.json", "rb") as of:
                 self.presets = json.load(of)
         except FileNotFoundError:
             raise FileNotFoundError("Could not load DiagramMaker-presets at "
                                     "'../setup/presets/diagrammaker_presets.json'!")
 
         try:
-            with open("../setup/standards/diagrammaker_standards.json", "r") as of:
+            with open("../setup/standards/diagrammaker_standards.json", "rb") as of:
                 self.standards = json.load(of)
         except FileNotFoundError:
             raise FileNotFoundError("Could not load DiagramMaker-standards at "
@@ -54,29 +54,107 @@ class DiagramMaker:
         if preset not in self.presets:
             raise ValueError(f"{preset} is not a valid preset!")
 
-        plot_type = self.presets[preset]["plot_type"]
-
         temp = self.presets[preset].copy()
-        temp.pop("plot_type")
-        for key in kwargs:
-            if key in temp:
+        plot_type = temp.pop("plot_type")
 
-                for inner_key in kwargs[key]:
-                    if type(kwargs[key][inner_key]) == dict and inner_key in temp[key]:
-                        kwargs[key][inner_key] = temp
+        updated_presets = merge(kwargs, temp)
 
-                if type(temp[key]) == dict and type(kwargs[key]) == dict:
-                    for inner_key in kwargs[key]:
-                        pass
+        if plot_type == "plot":
+            return self.draw_plot(data, **merge(updated_presets, self.standards[plot_type]))
+
+        elif plot_type == "hist":
+            return self.draw_hist(data, **merge(updated_presets, self.standards[plot_type]))
+
+    def draw_plot(self, data, **kwargs):
+
+        params = kwargs
+
+        try:
+            general_settings = params.pop("general")
+        except KeyError:
+            raise KeyError("There are no general settings provided (type=plot)!")
+
+        try:
+            plot_kwargs = params.pop("plot_kwargs")
+        except KeyError:
+            plot_kwargs = {}
+            print("No plot_kwargs have been provided! Falling back to standard settings!")
+
+        ax = create_window(general_settings)
+
+        diagram = ax.plot(*data, **plot_kwargs)
+
+        ax = config_window(ax, params)
+
+        finish_diagram(general_settings)
+
+
+    def draw_hist(self, data, **kwargs):
+        pass
+
+
+def finish_diagram(params) -> None:
+    if params["save"]:
+        if params["path"] is None:
+            plt.savefig("digram.png", dpi=params["dpi"])
+            print("Done Saving!")
+        else:
+            plt.savefig(params["path"], dpi=params["dpi"])
+            print("Done Saving!")
+
+    if params["draw"]:
+        plt.show()
+
+
+def stringify_command(key_list: list) -> str:
+    if len(key_list) == 1:
+        return str(key_list[0])
+
+    else:
+        key1 = str(key_list[0])
+        key2 = str(key_list[1])
+
+        if type(key_list[2]) is dict:
+            settings = ""
+            dict_settings = key_list[2]
+
+            for key, entry in dict_settings.items():
+
+
+                if type(entry) is str:
+                    settings = settings + key + "=" + "'" + entry + "', "
                 else:
-                    print(f"{key} has to link to a dictionary type!")
+                    settings = settings + key + "=" + f"{entry}" + ", "
 
-                    kwargs[key] = temp[key] | kwargs[key]
+            return f"{key1}.{key2}({settings})"
+
+        else:
+            if type(key_list[2]) is str:
+                return f"{key1}.{key2}('{key_list[2]}')"
+            else:
+                return f"{key1}.{key2}({key_list[2]})"
 
 
+def config_window(ax, params):
+    for key1 in params:
+        for key2, item in params[key1].items():
+            cmd = stringify_command([key1, key2, item])
+
+            try:
+                eval(cmd)
+            except (TypeError, NameError) as e:
+                print(cmd + " raised " + e.__str__())
+
+    return ax
 
 
+def create_window(params):
+    if params["ax"] is None:
+        fig = plt.figure()
+        return fig.add_subplot(111)
+    else:
+        return params["ax"]
 
-# print([92, 32] + [None])
 
-# eval(---) throws a NameError
+a = DiagramMaker()
+a.make_diagram("spec", [[1,2,3,4,5],[12,45,2,3,64]])
