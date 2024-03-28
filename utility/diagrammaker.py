@@ -6,6 +6,10 @@ from pprint import pprint
 
 locale.setlocale(locale.LC_ALL, "")
 
+'''
+DICTIONARY MERGE FUNCTION -------------------------------------------
+'''
+
 
 def merge(a: dict, b: dict, path=None):
     if path is None:
@@ -27,76 +31,15 @@ def merge(a: dict, b: dict, path=None):
     return a
 
 
-class DiagramMaker:
-
-    def __init__(self):
-        self.standards = {}
-        self.presets = {}
-        self.load_setup()
-
-    def load_setup(self):
-        try:
-            with open("../setup/presets/diagrammaker_presets.json", "rb") as of:
-                self.presets = json.load(of)
-        except FileNotFoundError:
-            raise FileNotFoundError("Could not load DiagramMaker-presets at "
-                                    "'../setup/presets/diagrammaker_presets.json'!")
-
-        try:
-            with open("../setup/standards/diagrammaker_standards.json", "rb") as of:
-                self.standards = json.load(of)
-        except FileNotFoundError:
-            raise FileNotFoundError("Could not load DiagramMaker-standards at "
-                                    "'../setup/standards/diagrammaker_standards.json'!")
-
-    def make_diagram(self, preset, data, **kwargs):
-
-        if preset not in self.presets:
-            raise ValueError(f"{preset} is not a valid preset!")
-
-        temp = self.presets[preset].copy()
-        plot_type = temp.pop("plot_type")
-
-        updated_presets = merge(kwargs, temp)
-
-        if plot_type == "plot":
-            return self.draw_plot(data, **merge(updated_presets, self.standards[plot_type]))
-
-        elif plot_type == "hist":
-            return self.draw_hist(data, **merge(updated_presets, self.standards[plot_type]))
-
-    def draw_plot(self, data, **kwargs):
-
-        params = kwargs
-
-        try:
-            general_settings = params.pop("general")
-        except KeyError:
-            raise KeyError("There are no general settings provided (type=plot)!")
-
-        try:
-            plot_kwargs = params.pop("plot_kwargs")
-        except KeyError:
-            plot_kwargs = {}
-            print("No plot_kwargs have been provided! Falling back to standard settings!")
-
-        ax = create_window(general_settings)
-
-        diagram = ax.plot(*data, **plot_kwargs)
-
-        ax = config_window(ax, params)
-
-        finish_diagram(general_settings)
-
-
-    def draw_hist(self, data, **kwargs):
-        pass
+"""
+DIAGRAM MAKING ------------------------------------------------------
+"""
 
 
 def finish_diagram(params) -> None:
     if params["save"]:
         if params["path"] is None:
-            plt.savefig("digram.png", dpi=params["dpi"])
+            plt.savefig("diagram.png", dpi=params["dpi"])
             print("Done Saving!")
         else:
             plt.savefig(params["path"], dpi=params["dpi"])
@@ -119,7 +62,6 @@ def stringify_command(key_list: list) -> str:
             dict_settings = key_list[2]
 
             for key, entry in dict_settings.items():
-
 
                 if type(entry) is str:
                     settings = settings + key + "=" + "'" + entry + "', "
@@ -156,5 +98,105 @@ def create_window(params):
         return params["ax"]
 
 
-a = DiagramMaker()
-a.make_diagram("spec", [[1,2,3,4,5],[12,45,2,3,64]])
+'''
+WRAPPERS FOR DIAGRAM CREATION ---------------------------------------
+'''
+
+
+def draw_plot(data, **kwargs):
+    params = kwargs
+
+    try:
+        general_settings = params.pop("general")
+    except KeyError:
+        raise KeyError("There are no general settings provided (type=plot)!")
+
+    try:
+        plot_kwargs = params.pop("plot_kwargs")
+    except KeyError:
+        plot_kwargs = {}
+        print("No plot_kwargs have been provided! Falling back to standard settings!")
+
+    ax = create_window(general_settings)
+
+    diagram = ax.plot(*data, **plot_kwargs)
+
+    ax = config_window(ax, params)
+
+    finish_diagram(general_settings)
+
+    return diagram
+
+
+def draw_hist(data, **kwargs):
+    params = kwargs
+
+    try:
+        general_settings = params.pop("general")
+    except KeyError:
+        raise KeyError("There are no general settings provided (type=plot)!")
+
+    try:
+        plot_kwargs = params.pop("plot_kwargs")
+    except KeyError:
+        plot_kwargs = {}
+        print("No plot_kwargs have been provided! Falling back to standard settings!")
+
+    ax = create_window(general_settings)
+
+    diagram = ax.stairs(*data, **plot_kwargs)
+
+    ax = config_window(ax, params)
+
+    finish_diagram(general_settings)
+
+    return diagram
+
+
+'''
+ACTUAL DIAGRAM CLASS ------------------------------------------------
+'''
+
+
+class DiagramMaker:
+
+    def __init__(self):
+        self.standards = {}
+        self.presets = {}
+        self.load_setup()
+
+    def load_setup(self):
+        try:
+            with open("../setup/presets/diagrammaker_presets.json", "rb") as of:
+                self.presets = json.load(of)
+        except FileNotFoundError:
+            raise FileNotFoundError("Could not load DiagramMaker-presets at "
+                                    "'../setup/presets/diagrammaker_presets.json'!")
+
+        try:
+            with open("../setup/standards/diagrammaker_standards.json", "rb") as of:
+                self.standards = json.load(of)
+        except FileNotFoundError:
+            raise FileNotFoundError("Could not load DiagramMaker-standards at "
+                                    "'../setup/standards/diagrammaker_standards.json'!")
+
+    def make_diagram(self, preset, data, **kwargs):
+
+        if preset not in self.presets:
+            raise ValueError(f"{preset} is not a valid preset!")
+
+        temp = self.presets[preset].copy()
+        plot_type = temp.pop("plot_type")
+
+        updated_presets = merge(kwargs, temp)
+
+        if plot_type == "plot":
+            return draw_plot(data, **merge(updated_presets, self.standards[plot_type]))
+
+        elif plot_type == "hist":
+            return draw_hist(data, **merge(updated_presets, self.standards[plot_type]))
+
+
+if __name__ == "__main__":
+    a = DiagramMaker()
+    a.make_diagram("spec", [[1, 2, 3, 4, 5], [12, 45, 2, 3, 64]])
