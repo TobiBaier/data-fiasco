@@ -67,12 +67,8 @@ class FileManager:
     def load_setup(self):
 
         # load presets
-        try:
-            with open("../setup/presets/filemanager_presets.json", "r") as of:
-                self.presets = json.load(of)
-        except FileNotFoundError:
-            raise FileNotFoundError("Could not load Filemanager-presets at "
-                                    "'../setup/presets/filemanager_presets.json'!")
+        with open(os.path.dirname(__file__).removesuffix("utility") + "/setup/presets/filemanager_presets.json", "r") as of:
+            self.presets = json.load(of)
 
         # extract given identifiers, if type is list or catalogue
         self.sort_by_identifiers = [False] * len(self.presets["identifiers"])
@@ -104,7 +100,6 @@ class FileManager:
 
     def check_filename_format(self, filename, check_identifier=True, check_rest=True):
         name_elements = filename.split("_")
-
         if check_identifier:
             if not self.check_identifiers(filename):
                 return False

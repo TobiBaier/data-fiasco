@@ -166,19 +166,11 @@ class DiagramMaker:
         self.load_setup()
 
     def load_setup(self):
-        try:
-            with open("../setup/presets/diagrammaker_presets.json", "rb") as of:
-                self.presets = json.load(of)
-        except FileNotFoundError:
-            raise FileNotFoundError("Could not load DiagramMaker-presets at "
-                                    "'../setup/presets/diagrammaker_presets.json'!")
+        with open(os.path.dirname(__file__).removesuffix("utility") + "/setup/presets/diagrammaker_presets.json", "rb") as of:
+            self.presets = json.load(of)
 
-        try:
-            with open("../setup/standards/diagrammaker_standards.json", "rb") as of:
-                self.standards = json.load(of)
-        except FileNotFoundError:
-            raise FileNotFoundError("Could not load DiagramMaker-standards at "
-                                    "'../setup/standards/diagrammaker_standards.json'!")
+        with open(os.path.dirname(__file__).removesuffix("utility") + "/setup/standards/diagrammaker_standards.json", "rb") as of:
+            self.standards = json.load(of)
 
     def make_diagram(self, preset, data, **kwargs):
 

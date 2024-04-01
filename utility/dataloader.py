@@ -5,36 +5,27 @@ import numpy as np
 from pprint import pprint
 
 try:
-    from filemanager import FileManager
+    from utility.filemanager import FileManager
 except ModuleNotFoundError:
     print("ATTENTION! Operating without FileManager! Only read functions will work!")
 
 
-class DataLoader:
+class DataLoader(FileManager):
 
-    cfile: FileManager
+    def __init__(self, root_path):
 
-    def __init__(self, cfile: FileManager):
-        self.cfile = cfile
+        super().__init__(root_path)
 
         self.standards = {}
         self.presets = {}
         self.load_setup()
 
     def load_setup(self):
-        try:
-            with open("../setup/presets/dataloader_presets.json", "r") as of:
-                self.presets = json.load(of)
-        except FileNotFoundError:
-            raise FileNotFoundError("Could not load Dataloader-presets at"
-                                    "'../setup/presets/dataloader_presets.json'!")
+        with open(os.path.dirname(__file__).removesuffix("utility") + "/setup/presets/dataloader_presets.json", "r") as of:
+            self.presets = json.load(of)
 
-        try:
-            with open("../setup/standards/dataloader_standards.json", "r") as of:
-                self.standards = json.load(of)
-        except FileNotFoundError:
-            raise FileNotFoundError("Could not load Dataloader-standards at"
-                                    "'../setup/standards/dataloader_standards.json'!")
+        with open(os.path.dirname(__file__).removesuffix("utility") + "setup/standards/dataloader_standards.json", "r") as of:
+            self.standards = json.load(of)
 
     def auto_read(self, path):
 
@@ -46,9 +37,7 @@ class DataLoader:
         else:
             raise TypeError(f"The ending '{ending}' cannot be read!")
 
-
-
-        ids, id_names = self.cfile.get_identifiers(path, return_id_names=True)
+        ids, id_names = self.get_identifiers(path, return_id_names=True)
 
         for name, id in zip(id_names, ids):
             if name in self.presets:
@@ -63,7 +52,7 @@ class DataLoader:
                       f"'.{current_settings['data_type']}'! Trying to read anyway.")
             current_settings["settings"].pop("data_type")
 
-        pprint(current_settings)
+        # pprint(current_settings)
 
     def data_from_csv(self, filepath: str, **kwargs):
 
@@ -108,7 +97,7 @@ class DataLoader:
 
 
 
-fi = FileManager("Z:\Studenten\Baier\sample-data")
-dl = DataLoader(fi)
+# fi = FileManager("Z:\Studenten\Baier\sample-data")
+# dl = DataLoader(fi)
 
-dl.auto_read("Z:\Studenten\Baier\sample-data\data\sev\sebis110\sev_sebis110_bng2s096_na22_530_15min_hist_good.txt")
+# dl.auto_read("Z:\Studenten\Baier\sample-data\data\sev\sebis110\sev_sebis110_bng2s096_na22_530_15min_hist_good.txt")
