@@ -3,32 +3,13 @@ import os
 import matplotlib.pyplot as plt
 import locale
 from pprint import pprint
+from utility.merge import merge
 
 locale.setlocale(locale.LC_ALL, "")
 
 '''
 DICTIONARY MERGE FUNCTION -------------------------------------------
 '''
-
-
-def merge(a: dict, b: dict, path=None):
-    if path is None:
-        path = []
-
-    for key in b:
-        if key in a:
-            if isinstance(a[key], dict) and isinstance(b[key], dict):
-                merge(a[key], b[key], path + [str(key)])
-            elif isinstance(a[key], list) or isinstance(b[key], list):
-                if a[key] is None:
-                    a[key] = b[key]
-                elif b[key] is None:
-                    a[key] = a[key]
-            elif a[key] != b[key]:
-                pass  # raise Exception('Conflict at ' + '.'.join(path + [str(key)]))
-        else:
-            a[key] = b[key]
-    return a
 
 
 """
@@ -42,8 +23,10 @@ def finish_diagram(params) -> None:
             plt.savefig("diagram.png", dpi=params["dpi"])
             print("Done Saving!")
         else:
+            if not os.path.exists(os.path.split(params["path"])[0]):
+                os.makedirs(os.path.split(params["path"])[0])
             plt.savefig(params["path"], dpi=params["dpi"])
-            print("Done Saving!")
+            print(f"Done Saving! {(os.path.split(params['path'])[1])}")
 
     if params["draw"]:
         plt.show()

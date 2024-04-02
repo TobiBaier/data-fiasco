@@ -237,7 +237,9 @@ class FileManager:
     def get_save_path(self, filename):
 
         try:
-            return self.get_data_path(filename).replace(self.data_path, self.prodata_path)
+            wrong_ending = self.get_data_path(filename).replace(self.data_path, self.prodata_path)
+
+            return wrong_ending.split(".")[0] + ".pdf"
         except AttributeError:
             return 
 
@@ -311,6 +313,8 @@ class FileManager:
 
 
 # a = FileManager("Z:\Studenten\Baier\sample-data")
+# a = FileManager("C:/Users/baier/OneDrive/Programmierprojekte/data_fiasco")
+# print(a.get_identifiers("C:/Users/baier/OneDrive/Programmierprojekte/data_fiasco/data/sev/sebis110/sev_sebis110_bng2s096_na22_530_15min_hist_good.txt", return_id_names=True))
 # print(a.get_identifiers("sev_sebis110_bng2s096_na22_530_15min_hist_good.txt"))
 # print(a.resort_data([1, 0]))
 

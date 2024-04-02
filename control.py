@@ -81,14 +81,14 @@ class Control:
             kwargs["plt"]["title"], kwargs["plt"]["suptitle"] = self.title_constructor(filename)
 
         rec_data = self.data.auto_read(self.file.get_data_path(filename))
-
+        print(rec_data)
         return self.draw.make_diagram(preset, rec_data, **kwargs)
 
 
 def get_inst(path="C:/Users/baier/OneDrive/Programmierprojekte/data_fiasco"):
     di = DiagramMaker()
     fi = FileManager(path)
-    da = DataLoader(path)
+    da = DataLoader(fi)
 
     return Control(di, fi, da)
 
