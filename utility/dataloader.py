@@ -45,7 +45,6 @@ class DataLoader:
                 if id in self.presets[name]:
                     for key in current_settings:
                         if key in self.presets[name][id]:
-                            print(key)
                             current_settings[key] = merge(self.presets[name][id][key], current_settings[key])
 
         current_settings = merge(kwargs, current_settings)

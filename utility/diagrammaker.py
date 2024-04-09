@@ -26,7 +26,7 @@ def finish_diagram(params) -> None:
             if not os.path.exists(os.path.split(params["path"])[0]):
                 os.makedirs(os.path.split(params["path"])[0])
             plt.savefig(params["path"], dpi=params["dpi"])
-            print(f"Done Saving! {(os.path.split(params['path'])[1])}")
+            print(f"Done Saving: {(os.path.split(params['path'])[1])} !")
 
     if params["draw"]:
         plt.show()

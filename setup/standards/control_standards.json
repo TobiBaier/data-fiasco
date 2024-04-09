@@ -1,6 +1,9 @@
 {
   "auto_plot": {
-
+    "plt": {
+      "title": null,
+      "suptitle": null
+    }
   },
   "multi_plot": {
 

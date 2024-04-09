@@ -81,8 +81,10 @@ class Control:
             kwargs["plt"]["title"], kwargs["plt"]["suptitle"] = self.title_constructor(filename)
 
         rec_data = self.data.auto_read(self.file.get_data_path(filename))
-        print(rec_data)
         return self.draw.make_diagram(preset, rec_data, **kwargs)
+
+    def create_combiplot(self, names):
+        pass
 
 
 def get_inst(path="C:/Users/baier/OneDrive/Programmierprojekte/data_fiasco"):
